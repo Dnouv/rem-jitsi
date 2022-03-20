@@ -20,7 +20,7 @@ const App = () => {
             pass: data.get('pass')
         }))
 
-        window.history.pushState(form, "jitsi", "/jitsi")
+        window.history.pushState(form, "jitsi", "/rem-jitsi/jitsi")
       };
 
     const printEventOutput = payload => {
@@ -93,7 +93,7 @@ const App = () => {
     };
 
     const handleReadyToClose = () => {
-        window.history.pushState("", "jitsi", "/")
+        window.history.pushState("", "jitsi", "/rem-jitsi/")
         window.location.reload()
     };
 
@@ -205,14 +205,13 @@ const App = () => {
     );
 
     const showFront = () => {
-        if (window.location.pathname === "/") {
+        if (window.location.pathname === "/rem-jitsi/") {
             return <SignUp handleSubmit={handleSubmit} />
         }
     }
 
     const showJitsi = () => {
-        if (window.location.pathname === "/jitsi") {
-            console.log("jitsi", form)
+        if (window.location.pathname === "/rem-jitsi/jitsi") {
             return (
                 <JitsiMeeting
                 roomName = { generateRoomName() }
@@ -243,9 +242,9 @@ const App = () => {
             <div>
                 {showJitsi()}
             </div>
-            {window.location.pathname === "/jitsi" && renderButtons()}
-            {window.location.pathname === "/jitsi" && renderNewInstance()}
-            {window.location.pathname === "/jitsi" && renderLog()}
+            {window.location.pathname === "/rem-jitsi/jitsi" && renderButtons()}
+            {window.location.pathname === "/rem-jitsi/jitsi" && renderNewInstance()}
+            {window.location.pathname === "/rem-jitsi//jitsi" && renderLog()}
             <div>
                 {showFront()}
             </div>
