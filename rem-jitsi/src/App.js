@@ -1,11 +1,27 @@
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import React, { useRef, useState } from 'react';
+import SignUp from './frontPage';
 
 const App = () => {
     const apiRef = useRef();
     const [ logItems, updateLog ] = useState([]);
     const [ showNew, toggleShowNew ] = useState(false);
     const [ knockingParticipants, updateKnockingParticipants ] = useState([]);
+    const [form, setForm] = useState({
+        subject: "", pass: ""
+    })
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        
+        setForm((prev) => ({...prev,
+            subject: data.get('subject'),
+            pass: data.get('pass')
+        }))
+
+        window.history.pushState(form, "jitsi", "/jitsi")
+      };
 
     const printEventOutput = payload => {
         updateLog(items => [ ...items, JSON.stringify(payload) ]);
@@ -65,21 +81,19 @@ const App = () => {
             knockingParticipant: handleKnockingParticipant
         });
 
-        let pwd = "random"
-
         apiRef.current.addEventListener('participantRoleChanged', function(event) {
             if (event.role === "moderator") {
-                apiRef.current.executeCommand('password', pwd);
+                apiRef.current.executeCommand('password', form.pass);
             }
         })
 
         apiRef.current.on('passwordRequired', function () {
-            apiRef.current.executeCommand('password', pwd);
+            apiRef.current.executeCommand('password', form.pass);
         })
     };
 
     const handleReadyToClose = () => {
-        alert('Ready to close...');
+        window.history.go(-1)
     };
 
     const generateRoomName = () => `JitsiMeetRoomNo${Math.random() * 100}-${Date.now()}`;
@@ -189,6 +203,33 @@ const App = () => {
         </div>
     );
 
+    const showFront = () => {
+        if (window.location.pathname === "/") {
+            return <SignUp handleSubmit={handleSubmit} />
+        }
+    }
+
+    const showJitsi = () => {
+        if (window.location.pathname === "/jitsi") {
+            console.log("jitsi", form)
+            return (
+                <JitsiMeeting
+                roomName = { generateRoomName() }
+                spinner = { renderSpinner }
+                config = {{
+                    subject: form.subject,
+                    hideConferenceSubject: false
+                }}
+                configOverwrite={{
+                    openSharedDocumentOnJoin: true
+                }}
+                onApiReady = { externalApi => handleApiReady(externalApi) }
+                onReadyToClose = { handleReadyToClose }
+                getIFrameRef = { handleJitsiIFrameRef1 } />
+            )
+        }
+    }
+
 
     return (
         <>
@@ -198,22 +239,15 @@ const App = () => {
             }}>
                 JitsiMeeting Demo App
             </h1>
-            <JitsiMeeting
-                roomName = { generateRoomName() }
-                spinner = { renderSpinner }
-                config = {{
-                    subject: 'lalalala',
-                    hideConferenceSubject: false
-                }}
-                configOverwrite={{
-                    openSharedDocumentOnJoin: true
-                }}
-                onApiReady = { externalApi => handleApiReady(externalApi) }
-                onReadyToClose = { handleReadyToClose }
-                getIFrameRef = { handleJitsiIFrameRef1 } />
-            {renderButtons()}
-            {renderNewInstance()}
-            {renderLog()}
+            <div>
+                {showJitsi()}
+            </div>
+            {window.location.pathname === "/jitsi" && renderButtons()}
+            {window.location.pathname === "/jitsi" && renderNewInstance()}
+            {window.location.pathname === "/jitsi" && renderLog()}
+            <div>
+                {showFront()}
+            </div>
         </>
     );
 };
