@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rem-jitsi/static/css/main.e6c13ad2.css",
+    "main.js": "/rem-jitsi/static/js/main.0bb97b48.js",
+    "static/js/787.06bc017a.chunk.js": "/rem-jitsi/static/js/787.06bc017a.chunk.js",
+    "index.html": "/rem-jitsi/index.html",
+    "main.e6c13ad2.css.map": "/rem-jitsi/static/css/main.e6c13ad2.css.map",
+    "main.0bb97b48.js.map": "/rem-jitsi/static/js/main.0bb97b48.js.map",
+    "787.06bc017a.chunk.js.map": "/rem-jitsi/static/js/787.06bc017a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.0bb97b48.js"
+  ]
+}
