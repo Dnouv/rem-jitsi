@@ -93,7 +93,8 @@ const App = () => {
     };
 
     const handleReadyToClose = () => {
-        window.history.go(-1)
+        window.history.pushState("", "jitsi", "/")
+        window.location.reload()
     };
 
     const generateRoomName = () => `JitsiMeetRoomNo${Math.random() * 100}-${Date.now()}`;
